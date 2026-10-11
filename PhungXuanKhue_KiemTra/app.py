@@ -11,6 +11,7 @@ import streamlit as st
 import train
 from train import transform, NUM_COLS
 
+st.set_page_config(page_title="Dự đoán nguy cơ tiểu đường", page_icon="🩺", layout="wide")
 
 @st.cache_resource
 def load_bundle():
@@ -20,6 +21,10 @@ def load_bundle():
     return joblib.load(train.MODEL_FILE)
 
 
+if not os.path.exists(train.MODEL_FILE) and not os.path.exists(train.DATA_FILE):
+    st.error("Không tìm thấy file dữ liệu CSDL_TieuDuong.csv. "
+             "Hãy đặt file này cùng thư mục với app.py rồi chạy lại.")
+    st.stop()
 bundle = load_bundle()
 model, params, FEATURES = bundle["model"], bundle["params"], bundle["features"]
 
@@ -41,7 +46,6 @@ DEFAULT = {"Tuoi": 45, "Glucose": 5.6, "HbA1C": 5.5, "Cholesterol": 5.0, "HDL": 
            "LDL": 3.0, "Triglycerid": 1.5, "Creatinine": 80.0, "Ure": 5.0,
            "AcidUric": 350.0, "AST": 25.0, "ALT": 22.0}
 
-st.set_page_config(page_title="Dự đoán nguy cơ tiểu đường", page_icon="🩺", layout="wide")
 st.title("🩺 Dự đoán nguy cơ bệnh tiểu đường")
 st.caption(f"SV: Phùng Xuân Khuê – 26ACN012 · Mô hình: {bundle['model_name']} · "
            f"F1 test = {bundle['test_metrics']['F1']:.3f}, Recall test = {bundle['test_metrics']['Recall']:.3f}")

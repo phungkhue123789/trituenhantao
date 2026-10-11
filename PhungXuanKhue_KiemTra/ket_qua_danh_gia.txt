@@ -1,0 +1,69 @@
+============================================================
+BƯỚC 1: Bài toán phân loại nhị phân - dự đoán NguyCoTieuDuong (0/1)
+============================================================
+BƯỚC 2: Thu thập dữ liệu
+Đọc dữ liệu: 4707 dòng, 14 cột
+============================================================
+BƯỚC 3.1: Làm sạch dữ liệu
+Đồng bộ nhãn: 0 nhãn không nhận dạng được -> loại bỏ
+Dữ liệu lỗi (ngoài khoảng hợp lệ) -> đặt là thiếu:
+  Glucose: 5 giá trị, ví dụ [750.0, 59.0, 61.0]
+  HbA1C: 1 giá trị, ví dụ [8025.0]
+  Cholesterol: 1 giá trị, ví dụ [55.0]
+  Creatinine: 1 giá trị, ví dụ [4.2]
+Xóa 0 dòng trùng lặp
+Số giá trị thiếu mỗi cột:
+  Tuoi=1, GioiTinh=4, Glucose=6, HbA1C=3, Cholesterol=3, LDL=2, Triglycerid=3, Creatinine=2, AcidUric=5, AST=2, ALT=2
+Sau làm sạch: 4707 dòng. Tỷ lệ nhãn: {0: 3610, 1: 1097}
+============================================================
+BƯỚC 3.3: Chia dữ liệu 70% train / 15% validation / 15% test (stratify)
+Train=3294, Val=706, Test=707
+============================================================
+BƯỚC 3.2: Điền thiếu (trung vị), xử lý ngoại lai (cắt P1-P99), mã hóa giới tính, chuẩn hóa StandardScaler
+============================================================
+BƯỚC 4-5: Huấn luyện các mô hình
+============================================================
+BƯỚC 6: Đánh giá trên tập VALIDATION
+                     Accuracy  Precision  Recall      F1  ROC_AUC
+Mô hình                                                          
+Logistic Regression    0.9674     0.9029  0.9634  0.9322   0.9825
+Random Forest          0.9915     1.0000  0.9634  0.9814   0.9999
+SVM                    0.9703     0.9497  0.9207  0.9350   0.9906
+
+=> Mô hình tốt nhất theo F1 trên validation: Random Forest
+
+Đánh giá TẤT CẢ mô hình trên tập TEST:
+                     Accuracy  Precision  Recall      F1  ROC_AUC
+Mô hình                                                          
+Logistic Regression    0.9745      0.920  0.9758  0.9471   0.9875
+Random Forest          0.9958      1.000  0.9818  0.9908   0.9982
+SVM                    0.9646      0.943  0.9030  0.9226   0.9912
+
+Chi tiết mô hình Random Forest trên TEST:
+               precision    recall  f1-score   support
+
+Không nguy cơ     0.9945    1.0000    0.9972       542
+   Có nguy cơ     1.0000    0.9818    0.9908       165
+
+     accuracy                         0.9958       707
+    macro avg     0.9972    0.9909    0.9940       707
+ weighted avg     0.9958    0.9958    0.9957       707
+
+Ma trận nhầm lẫn [[TN, FP], [FN, TP]]: [[542, 0], [3, 162]]
+
+Độ quan trọng các đặc trưng (Random Forest):
+Glucose        0.8258
+Tuoi           0.0440
+HbA1C          0.0301
+ALT            0.0223
+Creatinine     0.0197
+AST            0.0182
+Ure            0.0110
+Triglycerid    0.0097
+Cholesterol    0.0082
+HDL            0.0054
+AcidUric       0.0029
+GioiTinh       0.0027
+LDL            0.0000
+
+Đã lưu mô hình vào C:\Users\hinhu\AppData\Local\Temp\claude\--wsl-localhost-Ubuntu-24-04-home-hieudd-cntt4-trituenhantao\c51f87e0-f0a1-4fe7-9188-051472152c6b\scratchpad\full\model.pkl
