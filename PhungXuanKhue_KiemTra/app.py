@@ -8,10 +8,19 @@ import joblib
 import pandas as pd
 import streamlit as st
 
+import train
 from train import transform, NUM_COLS
 
-BASE = os.path.dirname(os.path.abspath(__file__))
-bundle = joblib.load(os.path.join(BASE, "model.pkl"))
+
+@st.cache_resource
+def load_bundle():
+    # Khi deploy lần đầu chưa có model.pkl -> tự huấn luyện từ CSDL_TieuDuong.csv
+    if not os.path.exists(train.MODEL_FILE):
+        train.main()
+    return joblib.load(train.MODEL_FILE)
+
+
+bundle = load_bundle()
 model, params, FEATURES = bundle["model"], bundle["params"], bundle["features"]
 
 # Ngưỡng tham khảo lâm sàng (đơn vị như trong dữ liệu): (thấp, cao, tên hiển thị, đơn vị)

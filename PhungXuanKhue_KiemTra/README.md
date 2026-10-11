@@ -39,6 +39,12 @@ Phần mềm hiển thị:
 - **Mức cảnh báo** theo xác suất: thấp (< 30%), thấp–trung bình (30–50%), có nguy cơ (50–70%), nguy cơ cao (≥ 70%), kèm khuyến nghị.
 - **Giải thích:** các chỉ số vượt ngưỡng tham khảo, và các chỉ số ảnh hưởng nhiều nhất tới dự đoán của mô hình (biểu đồ đóng góp).
 
+### Deploy lên Streamlit Community Cloud (miễn phí)
+1. Đẩy thư mục này (kèm `CSDL_TieuDuong.csv`) lên GitHub.
+2. Vào https://share.streamlit.io → đăng nhập bằng GitHub → **Create app**.
+3. Chọn repo, branch `main`, *Main file path*: `PhungXuanKhue_KiemTra/app.py` → **Deploy**.
+4. Lần chạy đầu app tự huấn luyện mô hình (khoảng vài chục giây), sau đó dùng bình thường.
+
 ## 3. Giải thích các bước thực hiện
 
 ### Bước 1 – Xác định bài toán
